@@ -13,12 +13,6 @@ fetch('quiz.json')
         console.error('Failed to fetch the JSON file.', error);
     });
 
-// let currentQuestion = {};
-// let acceptingAnswers = true;
-// let score = 0;
-// let questionCounter = 0;
-// let availableQuestions = [];
-
 //funktion för att rendera quizet
 function renderQuiz(questions) {
     const quizContainer = document.getElementById('quiz'); //div från html
@@ -59,41 +53,27 @@ function renderQuiz(questions) {
 
     function showQuestion(question) {
         quizContainer.innerHTML = ''; //rensa föregående fråga
+        quizContainer.appendChild(nextButton);
+
+        //skapa en fråga
+        const questionText = document.createElement('p');
+        questionText.textContent = question.question;
+        quizContainer.appendChild(questionText);
+
+        //skapa alternativ
+        question.options.forEach((option, i) => {
+            const label = document.createElement('label');
+            const radio = document.createElement('input');
+
+            radio.type = 'radio';
+            radio.name = `question-${currentQuestionIndex}`;
+            radio.value = i;
+
+            label.appendChild(radio);
+            label.appendChild(document.createTextNode(option));
+
+            quizContainer.appendChild(label);
+            quizContainer.appendChild(document.createElement('br'));
+        });
     }
-
-
-
-
-
-
-
-
-
-
-    // questions.forEach((item, index) => {
-    //     //skapa en fråga
-    //     const questionDiv = document.createElement('div');
-    //     questionDiv.className = 'question';
-
-    //     //lägg till frågetecken
-    //     const questionText = document.createElement('p');
-    //     questionText.textContent = `${index + 1}, ${item.question}`;
-    //     questionDiv.appendChild(questionText);
-
-    //     //lägg till svarsalternativ
-    //     item.options.forEach((option, i) => {
-    //         const label = document.createElement('label');
-    //         const radio = document.createElement('input');
-
-    //         radio.type = 'radio';
-    //         radio.name = `question-${index}`;
-    //         radio.value = i;
-
-    //         label.appendChild(radio);
-    //         label.appendChild(document.createTextNode(option));
-    //         questionDiv.appendChild(label);
-    //     });
-
-    //     quizContainer.appendChild(questionDiv);
-    // });
 }
