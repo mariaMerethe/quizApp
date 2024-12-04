@@ -46,36 +46,57 @@ function renderQuiz(questions) {
         }
     });
 
-    
-
     //visa första frågan
     showQuestion(questions[currentQuestionIndex]);
 
     function showQuestion(question) {
         quizContainer.innerHTML = ''; //rensa föregående fråga
-        quizContainer.appendChild(nextButton);
+        quizContainer.appendChild(nextButton); //lägger till knapp för att gå till nästa fråga
 
-        //skapa en fråga
-        const questionText = document.createElement('p');
-        questionText.textContent = question.question;
-        quizContainer.appendChild(questionText);
+        //skapa en frågatext
+        const questionText = document.createElement('p'); //skapar ett <p>-element
+        questionText.textContent = question.question; //lägger in frågetexten
+        quizContainer.appendChild(questionText); //lägger till det i quizContainer
 
         //skapa alternativ
         question.options.forEach((option, i) => {
-            const label = document.createElement('label');
-            const radio = document.createElement('input');
+            const label = document.createElement('label'); //skapar en <label> - HTML-tagg som kopplas till ett formulärfält (här ett radioknapp-alternativ), används för att beskriva fältet så användaren förstår vad alternativet innebär
+            const radio = document.createElement('input'); //skapar en <input> av typen 'radio' - HTML-element av typen <input>, men med attributet type='radio', radioknapp används när användaren ska välja endast ett alternativ
 
-            radio.type = 'radio';
-            radio.name = `question-${currentQuestionIndex}`;
-            radio.value = i;
+            radio.type = 'radio'; //sätter input till radioknapp
+            radio.name = `question-${currentQuestionIndex}`; //namn för att gruppera kanppar för en fråga
+            radio.value = i; //värdet på radioknappen (index för alternativet)
 
-            label.appendChild(radio);
-            label.appendChild(document.createTextNode(option));
+            label.appendChild(radio); //lägger till radioknappen i label (hela labeln blir klickbar)
+            label.appendChild(document.createTextNode(option)); //lägg till text för alternativet (tex: brun, lila, turkost), bredvid radioknappen
 
-            quizContainer.appendChild(label);
-            quizContainer.appendChild(document.createElement('br'));
+            radio.addEventListener('click', (event) => {
+                const userAnswer = parseInt(event.target.value); //hämtar valt alternativ
+                const correctAnswer = question.correctAnswer; //från min JSON-fil
+                
+                //iterera genom alla alternativ för att markera rätt/fel
+                question.options.forEach((option, i) => {
+                    const labels = document.querySelectorAll(`label`); //alla labels
+                    if (userAnswer === correctAnswer) {
+                        labels[i].style.backgroundColor = 'lightgreen'; //markera rätt svar som grönt
+                    } else {
+                        labels[i].style.backgroundColor = 'lightcoral'; //markera fel svar som rött
+                    }
+                });
+
+                //inaktivera alla radioknappar efter valet
+                const radios = document.querySelectorAll(`input[name='question-${currentQuestionIndex}']`);
+                radios.forEach((radio) => {
+                    radio.disabled = true;
+                });
+            });
+
+            quizContainer.appendChild(label); //lägger till label (med radioknappen och texten) i quizContainer
+            quizContainer.appendChild(document.createElement('br')); //radbrytning för att separera alternativen 
         });
     }
+
+    //knapp för att starta om quizet
     retryButton.addEventListener('click', function() {
         currentQuestionIndex = 0; //återställer index
         showQuestion(questions[currentQuestionIndex]); //visa första frågan igen
