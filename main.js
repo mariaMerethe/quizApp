@@ -15,12 +15,14 @@ fetch('quiz.json')
 
 //funktion för att rendera quizet
 function renderQuiz(questions) {
+
+    //skapa nytt quiz
     const quizContainer = document.getElementById('quiz'); //div från html
     const nextButton = document.createElement('button');
     const retryButton = document.createElement('button');
 
     nextButton.textContent = 'Nästa fråga';
-    retryButton.textContent = 'Spela quiz igen'
+    retryButton.textContent = 'Spela quiz igen';
     let currentQuestionIndex = 0;
 
     quizContainer.appendChild(nextButton);
@@ -44,9 +46,7 @@ function renderQuiz(questions) {
         }
     });
 
-    retryButton.addEventListener('click', () => {
-        location.reload(); //TODO: hitta ett bättre sätt !!!!!!!!!!!!!
-    });
+    
 
     //visa första frågan
     showQuestion(questions[currentQuestionIndex]);
@@ -76,4 +76,8 @@ function renderQuiz(questions) {
             quizContainer.appendChild(document.createElement('br'));
         });
     }
+    retryButton.addEventListener('click', function() {
+        currentQuestionIndex = 0; //återställer index
+        showQuestion(questions[currentQuestionIndex]); //visa första frågan igen
+    });
 }
