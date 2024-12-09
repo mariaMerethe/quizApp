@@ -106,6 +106,7 @@ function renderQuiz(questions) {
         });
 
         //visa timer
+        timeLeft = 10;
         const timerDiv = document.createElement('div');
         timerDiv.id = 'timer';
         timerDiv.textContent = `Tid kvar: ${timeLeft} sekunder`;
@@ -114,7 +115,6 @@ function renderQuiz(questions) {
     }
 
     function startTimer() {
-        timeLeft = 10; //återställ tid
         const timerDiv = document.getElementById('timer'); 
         // document.createElement('div');
         timerDiv.id = 'timer';
@@ -128,9 +128,10 @@ function renderQuiz(questions) {
 
             if (timeLeft <= 0) {
                 clearInterval(timer); //stoppa timern
+                timeLeft = 10; //resetta timer
                 goToNextQuestion(); //gå till nästa fråga
             }
-        }, 1000)
+        }, 1000);
     }
 
     function goToNextQuestion() {
@@ -145,7 +146,7 @@ function renderQuiz(questions) {
     }
 
     //knapp för att starta om quizet
-    retryButton.addEventListener('click', function() {
+    retryButton.addEventListener('click', function () {
         currentQuestionIndex = 0; //återställer index
         score = 0;
         showQuestion(questions[currentQuestionIndex]); //visa första frågan igen
