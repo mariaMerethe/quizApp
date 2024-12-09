@@ -3,27 +3,32 @@
         { 
             "question": "Vilken målarfärg är det som kan ta upp till 12 månader (eller mer) att torka rakt igenom?", 
             "options": ["Akrylfärg", "Akvarellfärg", "Oljefärg"], 
-            "correctAnswer": 2 
+            "wrongAnswer": [0, 1],
+            "correctAnswer": 2
         },
         {
             "question": "Vilken färg får du om du blandar rött och blått?",
             "options": ["Brun", "Lila", "Turkost"],
+            "wrongAnswer": [0, 2],
             "correctAnswer": 1
         },
         {
             "question": "Vad använder man för att blanda ut oljefärg?",
             "options": ["Olja", "Alkohol", "Vatten"],
+            "wrongAnswer": [1, 2],
             "correctAnswer": 0
         },
         {
             "question": "Vilken målarfärg är svår att måla lager på lager med då den inte har ett heltäckande resultat?",
             "options": ["Akvarellfärg/Vattenfärg", "Akrylfärg", "Oljefärg"],
+            "wrongAnswer": [1, 2],
             "correctAnswer": 0
         },
         {
             "question": "Vilka är de traditionella primärfärgerna?",
             "options": ["Röd, Grön, Blå", "Röd, Blå, Gul", "Cyan, Magenta, Gul, Svart"],
-            "correctAnswer": 2
+            "wrongAnswer": [0, 2],
+            "correctAnswer": 1
         }
     ]
 }

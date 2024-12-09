@@ -13,6 +13,9 @@ fetch('quiz.json')
         console.error('Failed to fetch the JSON file.', error);
     });
 
+let timeLeft = 10;
+let timer; //timer-ID för setInterval
+
 //funktion för att rendera quizet
 function renderQuiz(questions) {
 
@@ -70,14 +73,15 @@ function renderQuiz(questions) {
             label.appendChild(radio); //lägger till radioknappen i label (hela labeln blir klickbar)
             label.appendChild(document.createTextNode(option)); //lägg till text för alternativet (tex: brun, lila, turkost), bredvid radioknappen
 
-            radio.addEventListener('click', (event) => {
-                const userAnswer = parseInt(event.target.value); //hämtar valt alternativ
-                const correctAnswer = question.correctAnswer; //från min JSON-fil
+            //när användaren valt ett alternativ
+            radio.addEventListener('click', () => {
+                clearInterval(timer); //stoppar timern, användaren får trycka på 'Nästa fråga'
                 
                 //iterera genom alla alternativ för att markera rätt/fel
-                question.options.forEach((option, i) => {
-                    const labels = document.querySelectorAll(`label`); //alla labels
-                    if (userAnswer === correctAnswer) {
+                const labels = quizContainer.querySelectorAll('label'); //alla labels
+                question.options.forEach((_, i) => {
+                    
+                    if (i === question.correctAnswer) {
                         labels[i].style.backgroundColor = 'lightgreen'; //markera rätt svar som grönt
                     } else {
                         labels[i].style.backgroundColor = 'lightcoral'; //markera fel svar som rött
@@ -94,6 +98,45 @@ function renderQuiz(questions) {
             quizContainer.appendChild(label); //lägger till label (med radioknappen och texten) i quizContainer
             quizContainer.appendChild(document.createElement('br')); //radbrytning för att separera alternativen 
         });
+
+        //visa timer
+        const timerDiv = document.createElement('div');
+        timerDiv.id = 'timer';
+        timerDiv.textContent = `Tid kvar: ${timeLeft} sekunder`;
+        quizContainer.appendChild(timerDiv);
+
+        startTimer();
+    }
+
+    function startTimer() {
+        timeLeft = 10; //återställ tid
+        const timerDiv = document.getElementById('timer'); 
+        // document.createElement('div');
+        timerDiv.id = 'timer';
+        if (!timerDiv.parentNode) quizContainer.appendChild(timerDiv); //lägger bara till element om det inte redan finns
+
+        //starta nedräkningen
+        clearInterval(timer); //se till att ingen gammal timer är aktiv
+        timer = setInterval(() => {
+            timeLeft--;
+            timerDiv.textContent = `Tid kvar: ${timeLeft} sekunder`;
+
+            if (timeLeft <= 0) {
+                clearInterval(timer); //stoppa timern
+                goToNextQuestion(); //gå till nästa fråga
+            }
+        }, 1000);
+    }
+
+    function goToNextQuestion() {
+        currentQuestionIndex++;
+        if (currentQuestionIndex < questions.length) {
+            showQuestion(questions[currentQuestionIndex]);
+        } else {
+            quizContainer.innerHTML = `<p>Quiz färdigt!</p>`;
+            clearInterval(timer); //stoppa eventuell pågående timer
+            quizContainer.appendChild(retryButton);
+        }
     }
 
     //knapp för att starta om quizet
