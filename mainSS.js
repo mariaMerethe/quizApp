@@ -15,7 +15,6 @@ fetch('quiz.json')
 
 let timeLeft = 10;
 let timer; //timer-ID för setInterval
-let score = 0;
 
 //funktion för att rendera quizet
 function renderQuiz(questions) {
@@ -45,7 +44,7 @@ function renderQuiz(questions) {
         if (currentQuestionIndex < questions.length) {
             showQuestion(questions[currentQuestionIndex]);
         } else {
-            quizContainer.innerHTML = `<p>Quiz färdigt! Du fick ${score} rätt av ${questions.length} möjliga.</p>`; //visa poäng
+            quizContainer.innerHTML = '<p>Quiz färdigt!</p>'; //visa poäng
             quizContainer.appendChild(retryButton);
         }
     });
@@ -77,22 +76,17 @@ function renderQuiz(questions) {
             //när användaren valt ett alternativ
             radio.addEventListener('click', () => {
                 clearInterval(timer); //stoppar timern, användaren får trycka på 'Nästa fråga'
-                
+
                 //iterera genom alla alternativ för att markera rätt/fel
                 const labels = quizContainer.querySelectorAll('label'); //alla labels
                 question.options.forEach((_, i) => {
-                    
+
                     if (i === question.correctAnswer) {
                         labels[i].style.backgroundColor = 'lightgreen'; //markera rätt svar som grönt
                     } else {
                         labels[i].style.backgroundColor = 'lightcoral'; //markera fel svar som rött
                     }
                 });
-
-                //om användaren svarar rätt ökar deras poäng
-                if (radio.value == question.correctAnswer) {
-                    score++;
-                }
 
                 //inaktivera alla radioknappar efter valet
                 const radios = document.querySelectorAll(`input[name='question-${currentQuestionIndex}']`);
@@ -114,8 +108,7 @@ function renderQuiz(questions) {
     }
 
     function startTimer() {
-        timeLeft = 10; //återställ tid
-        const timerDiv = document.getElementById('timer'); 
+        const timerDiv = document.getElementById('timer');
         // document.createElement('div');
         timerDiv.id = 'timer';
         if (!timerDiv.parentNode) quizContainer.appendChild(timerDiv); //lägger bara till element om det inte redan finns
@@ -128,9 +121,10 @@ function renderQuiz(questions) {
 
             if (timeLeft <= 0) {
                 clearInterval(timer); //stoppa timern
+                timeLeft = 10; //resetta timer
                 goToNextQuestion(); //gå till nästa fråga
             }
-        }, 1000)
+        }, 1000);
     }
 
     function goToNextQuestion() {
@@ -138,16 +132,15 @@ function renderQuiz(questions) {
         if (currentQuestionIndex < questions.length) {
             showQuestion(questions[currentQuestionIndex]);
         } else {
-            quizContainer.innerHTML = `<p>Quiz färdigt! Du fick ${score} rätt av ${questions.length} möjliga.</p>`;
+            quizContainer.innerHTML = `<p>Quiz färdigt!</p>`;
             clearInterval(timer); //stoppa eventuell pågående timer
             quizContainer.appendChild(retryButton);
         }
     }
 
     //knapp för att starta om quizet
-    retryButton.addEventListener('click', function() {
+    retryButton.addEventListener('click', function () {
         currentQuestionIndex = 0; //återställer index
-        score = 0;
         showQuestion(questions[currentQuestionIndex]); //visa första frågan igen
     });
 }
