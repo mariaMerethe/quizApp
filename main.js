@@ -22,8 +22,11 @@ function renderQuiz(questions) {
 
     //skapa nytt quiz
     const quizContainer = document.getElementById('quiz'); //div från html
+    quizContainer.id = 'quizContainer';
     const nextButton = document.createElement('button');
+    nextButton.id = 'nextButton';
     const retryButton = document.createElement('button');
+    retryButton.id = 'retryButton';
 
     nextButton.textContent = 'Nästa fråga';
     retryButton.textContent = 'Spela quiz igen';
@@ -59,12 +62,14 @@ function renderQuiz(questions) {
 
         //skapa en frågatext
         const questionText = document.createElement('p'); //skapar ett <p>-element
+        questionText.id = 'questionText';
         questionText.textContent = question.question; //lägger in frågetexten
         quizContainer.appendChild(questionText); //lägger till det i quizContainer
 
         //skapa alternativ
         question.options.forEach((option, i) => {
             const label = document.createElement('label'); //skapar en <label> - HTML-tagg som kopplas till ett formulärfält (här ett radioknapp-alternativ), används för att beskriva fältet så användaren förstår vad alternativet innebär
+            label.id = 'optionText';
             const radio = document.createElement('input'); //skapar en <input> av typen 'radio' - HTML-element av typen <input>, men med attributet type='radio', radioknapp används när användaren ska välja endast ett alternativ
 
             radio.type = 'radio'; //sätter input till radioknapp
